@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Set your email address and the recipient's email address
+your_email="abdulmajidhussein001@gmail.com"
+recipient_email="abdimajidhussein14099@gmail.com"
+
+# Set the subject of the email
+subject="Battery Warning"
+
+# Check the battery status using 'upower'
+battery_status=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0)
+
+# Extract the battery percentage from 'upower' output
+battery_percentage=$(echo "$battery_status" | grep -E "percentage" | awk '{print $2}' | tr -d '%')
+
+# Define the threshold at which you want to send a warning (e.g., 20%)
+threshold=43
+
+if [ "$battery_percentage" -le "$threshold" ]; then
+    # Send an email if the battery percentage is below the threshold
+    message="Battery percentage is at $battery_percentage%. Please charge your laptop."
+    echo "$message" | mail -s "$subject" "$recipient_email"
+fi
